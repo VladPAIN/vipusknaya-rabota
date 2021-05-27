@@ -31,6 +31,7 @@ class ParseMiddleware
             }
             if ($ip->requests > 80){
                 // Показываем страницу ошибки если количество запросов больше чем 80 в минуту
+                $ip->update(['is_banned' => 'banned']);
                 abort(403);
             }
             // Если количество запросов меньше чем 80 в минуту, сохраняем запрос
@@ -75,6 +76,7 @@ class ParseMiddleware
 
         //Если больше десяти раз не указан реферер, баним
         if ($ip->referer_not_defined > 10){
+            $ip->update(['is_banned' => 'banned']);
             abort(403);
         }
         if (!$request->header('referer')){
